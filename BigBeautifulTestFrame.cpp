@@ -6,37 +6,38 @@
 /*   By: hdoo <hdoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/25 14:32:08 by hdoo              #+#    #+#             */
-/*   Updated: 2022/12/11 19:20:34 by hdoo             ###   ########.fr       */
+/*   Updated: 2022/12/23 23:37:14 by hdoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "BigBeautifulTestFrame.hpp"
+#ifdef VERBOSE
 #include <iostream>
 
 BigBeautifulTestFrame::BigBeautifulTestFrame()
 {
 	color_.foreground = NOCOLOR;
 	color_.background = GREEN;
-	width_            = 30;
+	width_ = 40;
 	verticalFrameSeg_ = '-';
-	leftVertax_       = '/';
-	rightVertax_      = '\\';
-	wall_             = '|';
-	field_            = 1;
-	padding_          = 0;
+	leftVertax_ = '/';
+	rightVertax_ = '\\';
+	wall_ = '|';
+	field_ = 1;
+	padding_ = 0;
 }
 
 BigBeautifulTestFrame::BigBeautifulTestFrame(size_t width)
 {
 	color_.foreground = NOCOLOR;
 	color_.background = GREEN;
-	width_            = width;
+	width_ = width;
 	verticalFrameSeg_ = '-';
-	leftVertax_       = '/';
-	rightVertax_      = '\\';
-	wall_             = '|';
-	field_            = 1;
-	padding_          = 0;
+	leftVertax_ = '/';
+	rightVertax_ = '\\';
+	wall_ = '|';
+	field_ = 1;
+	padding_ = 0;
 }
 
 BigBeautifulTestFrame::~BigBeautifulTestFrame()
@@ -90,7 +91,7 @@ void BigBeautifulTestFrame::printVerticalFrameReversed()
 		std::cout.fill(verticalFrameSeg_);
 		std::cout << wall_;
 	}
-	std::cout << "\b" << leftVertax_ << std::endl;
+	std::cout << "\b" << leftVertax_;
 }
 
 BigBeautifulTestFrame& BigBeautifulTestFrame::setForeGroundColor(std::string color)
@@ -145,7 +146,7 @@ BigBeautifulTestFrame& BigBeautifulTestFrame::setVerticalFrameSeg(char c)
 }
 BigBeautifulTestFrame& BigBeautifulTestFrame::setVertax(char c)
 {
-	leftVertax_  = c;
+	leftVertax_ = c;
 	rightVertax_ = c;
 	return (*this);
 }
@@ -163,4 +164,45 @@ BigBeautifulTestFrame& BigBeautifulTestFrame::setWall(char c)
 {
 	wall_ = c;
 	return (*this);
+}
+#endif
+
+void printVerbose(const std::string& str)
+{
+#ifdef VERBOSE
+	std::cout << str << std::endl;
+#else
+	(void)str;
+#endif // DEBUG
+}
+
+void printVerboseTitle(const std::string& str, int padding)
+{
+#ifdef VERBOSE
+	static BigBeautifulTestFrame f;
+
+	f.setVertax('#').setPadding(padding);
+	f.print(str);
+	std::cout << std::endl;
+#else
+	(void)str;
+	(void)padding;
+#endif // DEBUG
+}
+
+void printVerboseTitleEnter(const std::string& str, int padding)
+{
+#ifdef VERBOSE
+	std::string enter;
+
+	static BigBeautifulTestFrame f;
+	getline(std::cin, enter);
+	system("clear");
+	f.setVertax('#').setPadding(padding);
+	f.print(str);
+	getline(std::cin, enter);
+#else
+	(void)str;
+	(void)padding;
+#endif // DEBUG
 }

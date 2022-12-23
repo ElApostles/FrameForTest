@@ -6,13 +6,14 @@
 /*   By: hdoo <hdoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/25 14:31:23 by hdoo              #+#    #+#             */
-/*   Updated: 2022/12/11 19:20:06 by hdoo             ###   ########.fr       */
+/*   Updated: 2022/12/23 16:14:18 by hdoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
-
 #include <string>
+
+#ifdef VERBOSE
 #include <sys/_types/_size_t.h>
 
 #define BLACK "\x1b[38;2;255;255;255m"
@@ -63,3 +64,8 @@ class BigBeautifulTestFrame
 };
 
 typedef BigBeautifulTestFrame btf;
+#endif
+
+void printVerbose(const std::string& str);
+void printVerboseTitle(const std::string& str, int padding = 1);
+void printVerboseTitleEnter(const std::string& str, int padding = 1);
