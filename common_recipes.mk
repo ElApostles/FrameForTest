@@ -19,6 +19,10 @@ INCLUDE = -I ../utils
 
 COMPILECOMMAND = compile_commands.json
 
+ifeq ($(D), 1)
+	CFLAGS += -g -fsanitize=address,undefined
+endif
+
 ifeq ($(COMPILER), clang)
 	CXX := clang++
 endif
