@@ -21,6 +21,7 @@ COMPILECOMMAND = compile_commands.json
 
 ifeq ($(D), 1)
 	CFLAGS += -g -fsanitize=address,undefined
+	MAKE_JSON = -MJ $*.part.json
 endif
 
 ifeq ($(COMPILER), clang)
@@ -33,7 +34,7 @@ $(NAME) : $(OBJ)
 	$(CXX) $(CFLAGS) $(INCLUDE) $(OBJ) -o $@
 
 %.o: %.cpp
-	$(CXX) $(CFLAGS) $(INCLUDE) $(DEFINE) -MJ $*.part.json -c $< -o $(<:.cpp=.o)
+	$(CXX) $(CFLAGS) $(INCLUDE) $(DEFINE) $(MAKE_JSON) -c $< -o $(<:.cpp=.o)
 
 clean :
 	rm -f $(OBJ)
@@ -49,7 +50,7 @@ re :
 	$(MAKE) fclean
 	$(MAKE)
 
-COMPILECOMMAND : 
+dev : 
 	(printf [ && find . -name "*.part.json" | xargs cat && printf ]) > compile_commands.json
 
 ifneq "$(MAKECMDGOALS)" "clean"
