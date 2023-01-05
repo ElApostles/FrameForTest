@@ -6,7 +6,7 @@
 /*   By: hdoo <hdoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/25 14:32:08 by hdoo              #+#    #+#             */
-/*   Updated: 2022/12/31 06:59:15 by hdoo             ###   ########.fr       */
+/*   Updated: 2023/01/01 11:02:45 by hdoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ BigBeautifulTestFrame::BigBeautifulTestFrame()
 {
 	color_.strColor = NOCOLOR;
 	color_.frameColor = GREEN;
-	width_ = 40;
+	width_ = 45;
 	verticalFrameSeg_ = '-';
 	leftVertax_ = '/';
 	rightVertax_ = '\\';
