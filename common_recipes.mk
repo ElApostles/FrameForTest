@@ -1,9 +1,11 @@
 SRC_MAIN = main.cpp
 TEST_NAME ?= check
+V ?= 1
+DEFINE = -D VERBOSE
 
 SRC_IMP += ../utils/BigBeautifulTestFrame.cpp
-ifeq ($(V), 1)
-	DEFINE = -D VERBOSE
+ifeq ($(V), 0)
+	DEFINE =
 endif
 
 TEST_MAIN = test.cpp
@@ -12,12 +14,28 @@ SRC = $(SRC_IMP)
 
 INCLUDE = -I ../utils
 
-CFLAGS = -Wall -Wextra -Werror --std=c++98 -MMD -MP
+ERROR_FLAGS ?= -Wall -Wextra -Werror 
+CXX_STANDARD ?= -std=c++98
+OPTIONAL_FLAGS ?= -MMD -MP
+DEBUG ?= 
+
+ifeq ($(D), 1)
+	ERROR_FLAGS := -Weverything
+	DEBUG := -g -fsanitize=address,undefined
+endif
+
+ifeq ($(J), 1)
+	OPTIONAL_FLAGS += -MJ $*.part.json
+endif
+
+ifeq ($(C), clang)
+	CXX := clang++
+endif
 
 ifeq ($(MAKECMDGOALS), test)
 	SRC += $(TEST_MAIN)
 	INCLUDE += -I ../utils/doctest/doctest
-	CFLAGS = -Wall -Wextra -Werror --std=c++17 -MMD -MP
+	CXX_STANDARD := -std=c++17
 else ifeq ($(MAKECMDGOALS), clean)
 	SRC += $(TEST_MAIN)
 	SRC += $(SRC_MAIN)
@@ -25,23 +43,15 @@ else
 	SRC += $(SRC_MAIN)
 endif
 
+CFLAGS = $(ERROR_FLAGS) $(CXX_STANDARD) $(OPTIONAL_FLAGS) $(DEBUG)
+
 DEP = $(SRC:.cpp=.d)
 
 OBJ = $(SRC:.cpp=.o)
 
 JSON= $(SRC:.cpp=.part.json)
 
-
 COMPILECOMMAND = compile_commands.json
-
-ifeq ($(D), 1)
-	CFLAGS += -g -fsanitize=address,undefined
-	MAKE_JSON = -MJ $*.part.json
-endif
-
-ifeq ($(COMPILER), clang)
-	CXX := clang++
-endif
 
 all : $(NAME)
 
