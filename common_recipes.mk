@@ -1,7 +1,9 @@
+.PHONY : all clean fclean re dev test
+
 SRC_MAIN = main.cpp
 TEST_NAME ?= check
 V ?= 1
-DEFINE = -D VERBOSE
+DISABLE_DOCTEST ?= -D DOCTEST_CONFIG_DISABLE
 
 SRC_IMP += ../utils/BigBeautifulTestFrame.cpp
 ifeq ($(V), 0)
@@ -13,11 +15,26 @@ TEST_MAIN = test.cpp
 SRC = $(SRC_IMP)
 
 INCLUDE = -I ../utils
+INCLUDE += -I ../utils/doctest/doctest
 
 ERROR_FLAGS ?= -Wall -Wextra -Werror 
 CXX_STANDARD ?= -std=c++98
 OPTIONAL_FLAGS ?= -MMD -MP
 DEBUG ?= 
+
+
+ifeq ($(MAKECMDGOALS), $(TEST_NAME))
+	DISABLE_DOCTEST :=
+	CXX_STANDARD = -std=c++11
+	SRC += $(TEST_MAIN)
+	D = 1
+	C = 1
+else ifeq ($(MAKECMDGOALS), clean)
+	SRC += $(TEST_MAIN)
+	SRC += $(SRC_MAIN)
+else
+	SRC += $(SRC_MAIN)
+endif
 
 ifeq ($(D), 1)
 	ERROR_FLAGS := -Weverything
@@ -32,16 +49,7 @@ ifeq ($(C), clang)
 	CXX := clang++
 endif
 
-ifeq ($(MAKECMDGOALS), test)
-	SRC += $(TEST_MAIN)
-	INCLUDE += -I ../utils/doctest/doctest
-	CXX_STANDARD := -std=c++17
-else ifeq ($(MAKECMDGOALS), clean)
-	SRC += $(TEST_MAIN)
-	SRC += $(SRC_MAIN)
-else
-	SRC += $(SRC_MAIN)
-endif
+DEFINE = -D VERBOSE $(DISABLE_DOCTEST)
 
 CFLAGS = $(ERROR_FLAGS) $(CXX_STANDARD) $(OPTIONAL_FLAGS) $(DEBUG)
 
@@ -52,6 +60,8 @@ OBJ = $(SRC:.cpp=.o)
 JSON= $(SRC:.cpp=.part.json)
 
 COMPILECOMMAND = compile_commands.json
+
+DOCTEST = ../utils/doctest/doctest/doctest.h
 
 all : $(NAME)
 
@@ -79,12 +89,14 @@ re :
 dev : 
 	(printf [ && find . -name "*.part.json" | xargs cat && printf ]) > compile_commands.json
 
-test : $(TEST_NAME)
+$(DOCTEST) :
+	git clone https://github.com/doctest/doctest.git ../utils/doctest
 
 $(TEST_NAME) : $(OBJ)
 	$(CXX) $(CFLAGS) $(TEST_INCLUDE) $(INCLUDE) $(OBJ) -o $@
 
-.PHONY : all clean fclean re dev test
+test : | $(DOCTEST)
+	$(MAKE) $(TEST_NAME)
 
 ifneq "$(MAKECMDGOALS)" "clean"
 -include $(DEP)

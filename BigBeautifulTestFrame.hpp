@@ -6,7 +6,7 @@
 /*   By: hdoo <hdoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/25 14:31:23 by hdoo              #+#    #+#             */
-/*   Updated: 2022/12/31 04:55:19 by hdoo             ###   ########.fr       */
+/*   Updated: 2023/01/13 19:25:55 by hdoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,13 @@ class BigBeautifulTestFrame
 		std::string strColor;
 		std::string frameColor;
 	} t_color;
-	size_t width_;
-	size_t field_;
-	size_t padding_;
 	char verticalFrameSeg_;
 	char leftVertax_;
 	char rightVertax_;
 	char wall_;
+	size_t width_;
+	size_t field_;
+	size_t padding_;
 	std::string message_;
 	t_color color_;
 	void printVerticalFrame();
@@ -69,6 +69,6 @@ typedef BigBeautifulTestFrame btf;
 #endif
 
 void printVerbose(const std::string& str, const std::string& color = NOCOLOR);
-void printVerboseTitle(const std::string& str, const std::string& color = NOCOLOR, int padding = 1);
-void printVerboseTitleEnter(const std::string& str = "TEST", const std::string& color = NOCOLOR, int padding = 1);
+void printVerboseTitle(const std::string& str, const std::string& color = NOCOLOR, size_t padding = 1);
+void printVerboseTitleEnter(const std::string& str = "TEST", const std::string& color = NOCOLOR, size_t padding = 1);
 std::string itoaStream(int n);
